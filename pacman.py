@@ -14,14 +14,88 @@ yellow   = ( 255, 255,   0)
 
 def pacman(screen, x, y):
     color = yellow
-    pygame.draw.rect(screen,color,[x,y,20,20])
+    pygame.draw.ellipse(screen,color,[x,y,30,30])
+
+
+# This class represents the bar at the bottom that the player controls
+class Wall(pygame.sprite.Sprite):
+    # Constructor function
+    def __init__(self,x,y,width,height, color):
+        # Call the parent's constructor
+        pygame.sprite.Sprite.__init__(self)
+  
+        # Make a blue wall, of the size specified in the parameters
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+  
+        # Make our top-left corner the passed-in location.
+        self.rect = self.image.get_rect()
+        self.rect.top = y
+        self.rect.left = x
+
+# This creates all the walls in room 1
+def setupRoomOne():
+    # Make the walls. (x_pos, y_pos, width, height)
+    wall_list=pygame.sprite.RenderPlain()
+     
+    # This is a list of walls. Each is in the form [x, y, width, height]
+    walls = [ [0,0,6,600],
+              [0,0,600,6],
+              [0,600,606,6],
+              [600,0,6,606],
+              [300,0,6,66],
+              [60,60,186,6],
+              [360,60,186,6],
+              [60,120,66,6],
+              [60,120,6,126],
+              [180,120,246,6],
+              [300,120,6,66],
+              [480,120,66,6],
+              [540,120,6,126],
+              [120,180,126,6],
+              [120,180,6,126],
+              [360,180,126,6],
+              [480,180,6,126],
+              [180,240,6,126],
+              [180,360,246,6],
+              [420,240,6,126],
+              [240,240,6,66],
+              [240,300,126,6],
+              [360,240,6,66],
+              [0,300,66,6],
+              [540,300,66,6],
+              [60,360,66,6],
+              [60,360,6,186],
+              [480,360,66,6],
+              [540,360,6,186],
+              [120,420,366,6],
+              [120,420,6,66],
+              [480,420,6,66],
+              [186,480,246,6],
+              [300,480,6,66],
+              [120,540,6,66],
+              [120,540,126,6],
+              [360,540,126,6],
+              [480,540,6,66],
+            ]
+     
+    # Loop through the list. Create the wall, add it to the list
+    for item in walls:
+        wall=Wall(item[0],item[1],item[2],item[3],blue)
+        wall_list.add(wall)
+     
+    # return our new list
+    return wall_list
+
+current_room = 1
+wall_list = setupRoomOne()
 
 # This sets the width and height of each grid location
-width=20
-height=20
+width=54
+height=54
  
 # This sets the margin between each cell
-margin=5
+margin=6
  
 # Create a 2 dimensional array. A two dimesional
 # array is simply a list of lists.
@@ -37,7 +111,7 @@ for row in range(10):
 pygame.init()
   
 # Set the height and width of the screen
-size=[255,255]
+size=[606,606]
 screen=pygame.display.set_mode(size)
  
 # Set title of screen
@@ -57,8 +131,8 @@ x_speed=0
 y_speed=0
   
 # Current position
-x_coord=5
-y_coord=5
+x_coord=18
+y_coord=18
 
 
 # -------- Main Program Loop -----------
@@ -73,13 +147,13 @@ while done==False:
             # Figure out if it was an arrow key. If so
             # adjust speed.
             if event.key == pygame.K_LEFT:
-                x_speed=-25
+                x_speed=-60
             if event.key == pygame.K_RIGHT:
-                x_speed=25
+                x_speed=60
             if event.key == pygame.K_UP:
-                y_speed=-25
+                y_speed=-60
             if event.key == pygame.K_DOWN:
-                y_speed=25
+                y_speed=60
                   
         # User let up on a key
         if event.type == pygame.KEYUP:
@@ -95,20 +169,25 @@ while done==False:
     # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
  
     # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
- 
+    wall_list = setupRoomOne()
+    current_room = 1
+            
     # Move the object according to the speed vector.
     x_coord=x_coord+x_speed
     y_coord=y_coord+y_speed
  
     # Set the screen background
-    screen.fill(white)
+    screen.fill(black)
 
     pacman(screen,x_coord,y_coord)
- 
+
+    wall_list.draw(screen)
+    
     # Draw the grid
     for row in range(10):
         for column in range(10):
-            color = white
+            color = yellow
+            pygame.draw.ellipse(screen,color,[((margin+width)*column+margin)+24,((margin+height)*row+margin)+24,6,6])
  
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
