@@ -80,8 +80,30 @@ class Player(pygame.sprite.Sprite):
         if collide:
             # Whoops, hit a wall. Go back to the old position
             self.rect.top=old_y
-  
+
+# This class represents the ball        
+# It derives from the "Sprite" class in Pygame
+class Block(pygame.sprite.Sprite):
+     
+    # Constructor. Pass in the color of the block, 
+    # and its x and y position
+    def __init__(self, color, width, height):
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self) 
  
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([width, height])
+        self.image.fill(white)
+        self.image.set_colorkey(white)
+        pygame.draw.ellipse(screen,color,[(60*column+6)+24,(60*row+6)+24,width,height])
+ 
+        # Fetch the rectangle object that has the dimensions of the image
+        # image.
+        # Update the position of this object by setting the values 
+        # of rect.x and rect.y
+        self.rect = self.image.get_rect() 
+
 # This creates all the walls in room 1
 def setupRoomOne():
     # Make the walls. (x_pos, y_pos, width, height)
@@ -135,16 +157,23 @@ def setupRoomOne():
      
     # return our new list
     return wall_list
-  
+
 score = 0
 # Call this function so the Pygame library can initialize itself
 pygame.init()
   
 # Create an 600x600 sized screen
 screen = pygame.display.set_mode([606, 606])
-  
+
+# This is a list of 'sprites.' Each block in the program is
+# added to this list. The list is managed by a class called 'RenderPlain.'
+block_list = pygame.sprite.RenderPlain()
+
+# This is a list of every sprite. All blocks and the player block as well.
+all_sprites_list = pygame.sprite.RenderPlain()
+
 # Set the title of the window
-pygame.display.set_caption('Pac-man')
+pygame.display.set_caption('Pacman')
   
 # Create a surface we can draw on
 background = pygame.Surface(screen.get_size())
@@ -210,12 +239,18 @@ while done == False:
     # Draw the grid
     for row in range(10):
         for column in range(10):
-            color = yellow
             if row == 4 and (column == 4 or column == 5):
                 continue
             else:
-                pygame.draw.ellipse(screen,color,[(60*column+6)+24,(60*row+6)+24,6,6])
+              block = Block(yellow, 6, 6)
  
+              # Set a random location for the block
+              # block.rect.x = (60*column+6)+24
+              # block.rect.y = (60*row+6)+24
+               
+              # Add the block to the list of objects
+              block_list.add(block)
+              all_sprites_list.add(block) 
 
     pygame.display.flip()
   
