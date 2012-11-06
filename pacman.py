@@ -81,29 +81,6 @@ class Player(pygame.sprite.Sprite):
             # Whoops, hit a wall. Go back to the old position
             self.rect.top=old_y
 
-# This class represents the ball        
-# It derives from the "Sprite" class in Pygame
-class Block(pygame.sprite.Sprite):
-     
-    # Constructor. Pass in the color of the block, 
-    # and its x and y position
-    def __init__(self, color, width, height):
-        # Call the parent class (Sprite) constructor
-        pygame.sprite.Sprite.__init__(self) 
- 
-        # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
-        self.image = pygame.Surface([width, height])
-        self.image.fill(white)
-        self.image.set_colorkey(white)
-        pygame.draw.ellipse(screen,color,[(60*column+6)+24,(60*row+6)+24,width,height])
- 
-        # Fetch the rectangle object that has the dimensions of the image
-        # image.
-        # Update the position of this object by setting the values 
-        # of rect.x and rect.y
-        self.rect = self.image.get_rect() 
-
 # This creates all the walls in room 1
 def setupRoomOne():
     # Make the walls. (x_pos, y_pos, width, height)
@@ -158,6 +135,29 @@ def setupRoomOne():
     # return our new list
     return wall_list
 
+# This class represents the ball        
+# It derives from the "Sprite" class in Pygame
+class Block(pygame.sprite.Sprite):
+     
+    # Constructor. Pass in the color of the block, 
+    # and its x and y position
+    def __init__(self, color, width, height):
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self) 
+ 
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([width, height])
+        self.image.fill(white)
+        self.image.set_colorkey(white)
+        pygame.draw.ellipse(self.image,color,[0,0,width,height])
+ 
+        # Fetch the rectangle object that has the dimensions of the image
+        # image.
+        # Update the position of this object by setting the values 
+        # of rect.x and rect.y
+        self.rect = self.image.get_rect() 
+
 score = 0
 # Call this function so the Pygame library can initialize itself
 pygame.init()
@@ -171,6 +171,23 @@ block_list = pygame.sprite.RenderPlain()
 
 # This is a list of every sprite. All blocks and the player block as well.
 all_sprites_list = pygame.sprite.RenderPlain()
+
+
+# Draw the grid
+for row in range(10):
+    for column in range(10):
+        if row == 4 and (column == 4 or column == 5):
+            continue
+        else:
+          block = Block(yellow, 6, 6)
+
+          # Set a random location for the block
+          block.rect.x = (60*column+6)+24
+          block.rect.y = (60*row+6)+24
+           
+          # Add the block to the list of objects
+          block_list.add(block)
+          all_sprites_list.add(block) 
 
 # Set the title of the window
 pygame.display.set_caption('Pacman')
@@ -186,8 +203,7 @@ background.fill(black)
   
 # Create the player paddle object
 player = Player( 378, 138, "pacman.png" )
-movingsprites = pygame.sprite.RenderPlain()
-movingsprites.add(player)
+all_sprites_list.add(player)
   
 current_room = 1
 wall_list = setupRoomOne()
@@ -195,7 +211,7 @@ wall_list = setupRoomOne()
 clock = pygame.time.Clock()
   
 done = False
-  
+
 while done == False:
     # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
     for event in pygame.event.get():
@@ -221,10 +237,20 @@ while done == False:
                 player.changespeed(0,30)
             if event.key == pygame.K_DOWN:
                 player.changespeed(0,-30)
+
+        
     # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
  
     # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
     player.update(wall_list)
+
+    # See if the player block has collided with anything.
+    blocks_hit_list = pygame.sprite.spritecollide(player, block_list, True)  
+     
+    # Check the list of collisions.
+    if len(blocks_hit_list) > 0:
+        score +=len(blocks_hit_list)
+        print( score )
 
     # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
  
@@ -232,28 +258,12 @@ while done == False:
     # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
     screen.fill(black)
       
-    movingsprites.draw(screen)
     wall_list.draw(screen)
+    all_sprites_list.draw(screen)
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
     
-    # Draw the grid
-    for row in range(10):
-        for column in range(10):
-            if row == 4 and (column == 4 or column == 5):
-                continue
-            else:
-              block = Block(yellow, 6, 6)
- 
-              # Set a random location for the block
-              # block.rect.x = (60*column+6)+24
-              # block.rect.y = (60*row+6)+24
-               
-              # Add the block to the list of objects
-              block_list.add(block)
-              all_sprites_list.add(block) 
-
     pygame.display.flip()
   
     clock.tick(10)
-              
+
 pygame.quit()
