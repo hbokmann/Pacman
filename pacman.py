@@ -226,8 +226,16 @@ Blinky_directions = [
 [-15,0,4],
 ]
 
+Inky_directions = [
+]
+
+Clyde_directions = [
+]
+
 pl = len(Pinky_directions)-1
 bl = len(Blinky_directions)-1
+il = len(Inky_directions)-1
+cl = len(Clyde_directions)-1
 
 # Call this function so the Pygame library can initialize itself
 pygame.init()
@@ -343,6 +351,12 @@ while done == False:
 
     Blinky.changespeed(Blinky_directions,bl)
     Blinky.update(wall_list,False)
+
+    # Inky.changespeed(Inky_directions,il)
+    # Inky.update(wall_list,False)
+
+    # Clyde.changespeed(Clyde_directions,cl)
+    # Clyde.update(wall_list,False)
 
     # See if the Pacman block has collided with anything.
     blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True)
