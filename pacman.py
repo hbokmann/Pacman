@@ -15,6 +15,14 @@ yellow   = ( 255, 255,   0)
 Trollicon=pygame.image.load('images/Trollman.png')
 pygame.display.set_icon(Trollicon)
 
+#Add music
+pygame.mixer.init()
+pygame.mixer.music.load('pacman.mp3')
+pygame.mixer.music.play(-1, 0.0)
+
+# This is a list of every sprite. All blocks and the player block as well.
+all_sprites_list = pygame.sprite.RenderPlain()
+
 # This class represents the bar at the bottom that the player controls
 class Wall(pygame.sprite.Sprite):
     # Constructor function
@@ -57,8 +65,8 @@ def setupRoomOne():
               [180,240,6,126],
               [180,360,246,6],
               [420,240,6,126],
-              [240,240,36,6],
-              [330,240,36,6],
+              [240,240,42,6],
+              [324,240,42,6],
               [240,240,6,66],
               [240,300,126,6],
               [360,240,6,66],
@@ -81,13 +89,15 @@ def setupRoomOne():
     for item in walls:
         wall=Wall(item[0],item[1],item[2],item[3],blue)
         wall_list.add(wall)
+        all_sprites_list.add(wall)
          
     # return our new list
     return wall_list
 
 def setupGate():
       gate = pygame.sprite.RenderPlain()
-      gate.add(Wall(276,242,54,2,white))
+      gate.add(Wall(282,242,42,2,white))
+      all_sprites_list.add(gate)
       return gate
 
 # This class represents the ball        
@@ -142,8 +152,8 @@ class Player(pygame.sprite.Sprite):
 
     # Change the speed of the player
     def changespeed(self,x,y):
-        self.change_x=x
-        self.change_y=y
+        self.change_x+=x
+        self.change_y+=y
           
     # Find a new position for the player
     def update(self,walls,gate):
@@ -191,15 +201,23 @@ class Player(pygame.sprite.Sprite):
             self.rect.left=old_x
             self.rect.top=old_y
 
-turn = 0
-steps = 0
+p_turn = 0
+p_steps = 0
+
+b_turn = 0
+b_steps = 0
+
+i_turn = 0
+i_steps = 0
+
+c_turn = 0
+c_steps = 0
 
 #Inheritime Player klassist
 class Ghost(Player):
     # Change the speed of the ghost
-    def changespeed(self,list,l):
-        global turn
-        global steps
+    def changespeed(self,list,turn,steps,l):
+      try:
         z=list[turn][2]
         if steps < z:
           self.change_x=list[turn][0]
@@ -213,23 +231,91 @@ class Ghost(Player):
           self.change_x=list[turn][0]
           self.change_y=list[turn][1]
           steps = 0
+        return [turn,steps]
+      except IndexError:
+         return [0,0]
 
 Pinky_directions = [
-[0,-15,8],
-[15,0,24],
+[0,-30,4],
+[15,0,9],
+[0,15,11],
+[-15,0,23],
+[0,15,7],
+[15,0,11],
+[0,15,3],
+[15,0,19],
+[0,-15,15],
+[-15,0,7],
+[0,15,3],
+[-15,0,19],
+[0,-15,11],
+[15,0,9]
 ]
 
 Blinky_directions = [
-[0,-15,8],
-[-15,0,16],
+[-15,0,20],
 [0,15,16],
 [-15,0,4],
 ]
 
 Inky_directions = [
+[30,0,2],
+[0,-15,4],
+[15,0,10],
+[0,15,7],
+[15,0,3],
+[0,-15,3],
+[15,0,3],
+[0,-15,15],
+[-15,0,15],
+[0,15,3],
+[15,0,15],
+[0,15,11],
+[-15,0,3],
+[0,-15,7],
+[-15,0,11],
+[0,15,3],
+[-15,0,11],
+[0,15,7],
+[-15,0,3],
+[0,-15,3],
+[-15,0,3],
+[0,-15,15],
+[15,0,15],
+[0,15,3],
+[-15,0,15],
+[0,15,11],
+[15,0,3],
+[0,-15,11],
+[15,0,11],
+[0,15,3],
+[15,0,1],
 ]
 
 Clyde_directions = [
+[-30,0,2],
+[0,-15,4],
+[15,0,5],
+[0,15,7],
+[-15,0,11],
+[0,-15,7],
+[-15,0,3],
+[0,15,7],
+[-15,0,7],
+[0,15,15],
+[15,0,15],
+[0,-15,3],
+[-15,0,11],
+[0,-15,7],
+[15,0,3],
+[0,-15,11],
+[15,0,9],
+[0,15,7],
+[-15,0,11],
+[0,-15,7],
+[15,0,11],
+[0,15,8],
+[-15,0,11]
 ]
 
 pl = len(Pinky_directions)-1
@@ -246,9 +332,6 @@ screen = pygame.display.set_mode([606, 606])
 # This is a list of 'sprites.' Each block in the program is
 # added to this list. The list is managed by a class called 'RenderPlain.'
 block_list = pygame.sprite.RenderPlain()
-
-# This is a list of every sprite. All blocks and the player block as well.
-all_sprites_list = pygame.sprite.RenderPlain()
 
 monsta_list = pygame.sprite.RenderPlain()
 
@@ -288,6 +371,8 @@ for row in range(19):
             block_list.add(block)
             all_sprites_list.add(block)
 
+bll = len(block_list)
+
 #default locations for Pacman and monstas
 w = 303-16 #Width
 p_h = (7*60)+19 #Pacman height
@@ -302,15 +387,19 @@ all_sprites_list.add(Pacman)
  
 Blinky=Ghost( w, b_h, "images/Blinky.png" )
 monsta_list.add(Blinky)
- 
+all_sprites_list.add(Blinky)
+
 Pinky=Ghost( w, m_h, "images/Pinky.png" )
 monsta_list.add(Pinky)
+all_sprites_list.add(Pinky)
  
 Inky=Ghost( i_w, m_h, "images/Inky.png" )
 monsta_list.add(Inky)
+all_sprites_list.add(Inky)
  
 Clyde=Ghost( c_w, m_h, "images/Clyde.png" )
 monsta_list.add(Clyde)
+all_sprites_list.add(Clyde)
 
 
 clock = pygame.time.Clock()
@@ -331,7 +420,7 @@ while done == False:
             done=True
 
         if event.type == pygame.KEYDOWN:
-            Pacman.prevdirection()
+            # Pacman.prevdirection()
             if event.key == pygame.K_LEFT:
                 Pacman.changespeed(-30,0)
             if event.key == pygame.K_RIGHT:
@@ -340,23 +429,45 @@ while done == False:
                 Pacman.changespeed(0,-30)
             if event.key == pygame.K_DOWN:
                 Pacman.changespeed(0,30)
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                Pacman.changespeed(30,0)
+            if event.key == pygame.K_RIGHT:
+                Pacman.changespeed(-30,0)
+            if event.key == pygame.K_UP:
+                Pacman.changespeed(0,30)
+            if event.key == pygame.K_DOWN:
+                Pacman.changespeed(0,-30)
         
     # ALL EVENT PROCESSING SHOULD GO ABOVE THIS COMMENT
  
     # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
     Pacman.update(wall_list,gate)
 
-    # Pinky.changespeed(Pinky_directions,pl)
-    # Pinky.update(wall_list,False)
+    returned = Pinky.changespeed(Pinky_directions,p_turn,p_steps,pl)
+    p_turn = returned[0]
+    p_steps = returned[1]
+    Pinky.changespeed(Pinky_directions,p_turn,p_steps,pl)
+    Pinky.update(wall_list,False)
 
-    Blinky.changespeed(Blinky_directions,bl)
+    returned = Blinky.changespeed(Blinky_directions,b_turn,b_steps,bl)
+    b_turn = returned[0]
+    b_steps = returned[1]
+    Blinky.changespeed(Blinky_directions,b_turn,b_steps,bl)
     Blinky.update(wall_list,False)
 
-    # Inky.changespeed(Inky_directions,il)
-    # Inky.update(wall_list,False)
+    returned = Inky.changespeed(Inky_directions,i_turn,i_steps,il)
+    i_turn = returned[0]
+    i_steps = returned[1]
+    Inky.changespeed(Inky_directions,i_turn,i_steps,il)
+    Inky.update(wall_list,False)
 
-    # Clyde.changespeed(Clyde_directions,cl)
-    # Clyde.update(wall_list,False)
+    returned = Clyde.changespeed(Clyde_directions,c_turn,c_steps,cl)
+    c_turn = returned[0]
+    c_steps = returned[1]
+    Clyde.changespeed(Clyde_directions,c_turn,c_steps,cl)
+    Clyde.update(wall_list,False)
 
     # See if the Pacman block has collided with anything.
     blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True)
@@ -365,15 +476,15 @@ while done == False:
     if len(blocks_hit_list) > 0:
         score +=len(blocks_hit_list)
     
-    if score == 210:
+    if score == bll:
       print("yay, i got ALL the points! :D")
-      pygame.quit()
+      # break
 
     monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
 
     if monsta_hit_list:
       print("oops, i'm dead :(")
-      pygame.quit()
+      # break
 
     # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
  
@@ -385,12 +496,12 @@ while done == False:
     all_sprites_list.draw(screen)
     monsta_list.draw(screen)
 
-    text=font.render("Score: "+str(score)+"/210", True, red)
+    text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
     screen.blit(text, [10, 10])
     # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
     
     pygame.display.flip()
   
-    clock.tick(7)
+    clock.tick(10)
 
-pygame.quit()
+# pygame.quit()
