@@ -243,9 +243,13 @@ Pinky_directions = [
 [0,15,11],
 [-15,0,23],
 [0,15,7],
-[15,0,11],
-[0,15,3],
+[15,0,3],
+[0,-15,3],
 [15,0,19],
+[0,15,3],
+[15,0,3],
+[0,15,3],
+[15,0,3],
 [0,-15,15],
 [-15,0,7],
 [0,15,3],
@@ -356,6 +360,8 @@ block_list = pygame.sprite.RenderPlain()
 
 monsta_list = pygame.sprite.RenderPlain()
 
+pacman_collide = pygame.sprite.RenderPlain()
+
 # Set the title of the window
 pygame.display.set_caption('Pacman')
   
@@ -372,27 +378,6 @@ current_room = 1
 wall_list = setupRoomOne()
 gate = setupGate()
 
-# Draw the grid
-for row in range(19):
-    for column in range(19):
-        if (row == 7 or row == 8) and (column == 8 or column == 9 or column == 10) or (row == 15 and column == 10):
-            continue
-        else:
-          block = Block(yellow, 4, 4)
-
-          # Set a random location for the block
-          block.rect.x = (30*column+6)+26
-          block.rect.y = (30*row+6)+26
-
-          b_collide = pygame.sprite.spritecollide(block, wall_list, False)
-          if b_collide:
-            continue
-          else:
-            # Add the block to the list of objects
-            block_list.add(block)
-            all_sprites_list.add(block)
-
-bll = len(block_list)
 
 #default locations for Pacman and monstas
 w = 303-16 #Width
@@ -405,6 +390,7 @@ c_w = 303+(32-16) #Clyde width
 # Create the player paddle object
 Pacman = Player( w, p_h, "images/Trollman.png" )
 all_sprites_list.add(Pacman)
+pacman_collide.add(Pacman)
  
 Blinky=Ghost( w, b_h, "images/Blinky.png" )
 monsta_list.add(Blinky)
@@ -422,6 +408,30 @@ Clyde=Ghost( c_w, m_h, "images/Clyde.png" )
 monsta_list.add(Clyde)
 all_sprites_list.add(Clyde)
 
+# Draw the grid
+for row in range(19):
+    for column in range(19):
+        if (row == 7 or row == 8) and (column == 8 or column == 9 or column == 10):
+            continue
+        else:
+          block = Block(yellow, 4, 4)
+
+          # Set a random location for the block
+          block.rect.x = (30*column+6)+26
+          block.rect.y = (30*row+6)+26
+
+          b_collide = pygame.sprite.spritecollide(block, wall_list, False)
+          p_collide = pygame.sprite.spritecollide(block, pacman_collide, False)
+          if b_collide:
+            continue
+          elif p_collide:
+            continue
+          else:
+            # Add the block to the list of objects
+            block_list.add(block)
+            all_sprites_list.add(block)
+
+bll = len(block_list)
 
 clock = pygame.time.Clock()
 
