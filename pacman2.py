@@ -198,6 +198,7 @@ steps = 0
 class Ghost(Player):
     # Change the speed of the ghost
     def changespeed(self,list,l):
+      try:
         global turn
         global steps
         z=list[turn][2]
@@ -213,23 +214,90 @@ class Ghost(Player):
           self.change_x=list[turn][0]
           self.change_y=list[turn][1]
           steps = 0
+      except IndexError:
+       pass
 
 Pinky_directions = [
-[0,-15,8],
-[15,0,24],
+[0,-15,4],
+[15,0,9],
+[0,15,11],
+[-15,0,23],
+[0,15,7],
+[15,0,11],
+[0,15,3],
+[15,0,19],
+[0,-15,15],
+[-15,0,7],
+[0,15,3],
+[-15,0,19],
+[0,-15,11],
+[15,0,9]
 ]
 
 Blinky_directions = [
-[0,-15,8],
-[-15,0,16],
+[-15,0,20],
 [0,15,16],
 [-15,0,4],
 ]
 
 Inky_directions = [
+[15,0,2],
+[0,-15,4],
+[15,0,10],
+[0,15,7],
+[15,0,3],
+[0,-15,3],
+[15,0,3],
+[0,-15,15],
+[-15,0,15],
+[0,15,3],
+[15,0,15],
+[0,15,11],
+[-15,0,3],
+[0,-15,7],
+[-15,0,11],
+[0,15,3],
+[-15,0,11],
+[0,15,7],
+[-15,0,3],
+[0,-15,3],
+[-15,0,3],
+[0,-15,15],
+[15,0,15],
+[0,15,3],
+[-15,0,15],
+[0,15,11],
+[15,0,3],
+[0,-15,11],
+[15,0,11],
+[0,15,3],
+[15,0,1],
 ]
 
 Clyde_directions = [
+[-15,0,2],
+[0,-15,4],
+[15,0,5],
+[0,15,7],
+[-15,0,11],
+[0,-15,7],
+[-15,0,3],
+[0,15,7],
+[-15,0,7],
+[0,15,15],
+[15,0,15],
+[0,-15,3],
+[-15,0,11],
+[0,-15,7],
+[15,0,3],
+[0,-15,11],
+[15,0,15],
+[0,15,7],
+[-15,0,11],
+[0,-15,7],
+[15,0,11],
+[0,15,8],
+[-15,0,11]
 ]
 
 pl = len(Pinky_directions)-1
@@ -349,14 +417,14 @@ while done == False:
     # Pinky.changespeed(Pinky_directions,pl)
     # Pinky.update(wall_list,False)
 
-    Blinky.changespeed(Blinky_directions,bl)
-    Blinky.update(wall_list,False)
+    # Blinky.changespeed(Blinky_directions,bl)
+    # Blinky.update(wall_list,False)
 
     # Inky.changespeed(Inky_directions,il)
     # Inky.update(wall_list,False)
 
-    # Clyde.changespeed(Clyde_directions,cl)
-    # Clyde.update(wall_list,False)
+    Clyde.changespeed(Clyde_directions,cl)
+    Clyde.update(wall_list,False)
 
     # See if the Pacman block has collided with anything.
     blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True)
@@ -391,6 +459,6 @@ while done == False:
     
     pygame.display.flip()
   
-    clock.tick(7)
+    clock.tick(50)
 
 pygame.quit()
