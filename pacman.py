@@ -216,7 +216,7 @@ c_steps = 0
 #Inheritime Player klassist
 class Ghost(Player):
     # Change the speed of the ghost
-    def changespeed(self,list,turn,steps,l):
+    def changespeed(self,list,ghost,turn,steps,l):
       try:
         z=list[turn][2]
         if steps < z:
@@ -226,6 +226,8 @@ class Ghost(Player):
         else:
           if turn < l:
             turn+=1
+          elif ghost == "clyde":
+            turn = 2
           else:
             turn = 0
           self.change_x=list[turn][0]
@@ -253,9 +255,34 @@ Pinky_directions = [
 ]
 
 Blinky_directions = [
-[-15,0,20],
-[0,15,16],
-[-15,0,4],
+[0,-15,4],
+[15,0,9],
+[0,15,11],
+[15,0,3],
+[0,15,7],
+[-15,0,11],
+[0,15,3],
+[15,0,15],
+[0,-15,15],
+[15,0,3],
+[0,-15,11],
+[-15,0,3],
+[0,-15,11],
+[-15,0,3],
+[0,-15,3],
+[-15,0,7],
+[0,-15,3],
+[15,0,15],
+[0,15,15],
+[-15,0,3],
+[0,15,3],
+[-15,0,3],
+[0,-15,7],
+[-15,0,3],
+[0,15,7],
+[-15,0,11],
+[0,-15,7],
+[15,0,5]
 ]
 
 Inky_directions = [
@@ -310,12 +337,6 @@ Clyde_directions = [
 [15,0,3],
 [0,-15,11],
 [15,0,9],
-[0,15,7],
-[-15,0,11],
-[0,-15,7],
-[15,0,11],
-[0,15,8],
-[-15,0,11]
 ]
 
 pl = len(Pinky_directions)-1
@@ -445,28 +466,28 @@ while done == False:
     # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
     Pacman.update(wall_list,gate)
 
-    returned = Pinky.changespeed(Pinky_directions,p_turn,p_steps,pl)
+    returned = Pinky.changespeed(Pinky_directions,False,p_turn,p_steps,pl)
     p_turn = returned[0]
     p_steps = returned[1]
-    Pinky.changespeed(Pinky_directions,p_turn,p_steps,pl)
+    Pinky.changespeed(Pinky_directions,False,p_turn,p_steps,pl)
     Pinky.update(wall_list,False)
 
-    returned = Blinky.changespeed(Blinky_directions,b_turn,b_steps,bl)
+    returned = Blinky.changespeed(Blinky_directions,False,b_turn,b_steps,bl)
     b_turn = returned[0]
     b_steps = returned[1]
-    Blinky.changespeed(Blinky_directions,b_turn,b_steps,bl)
+    Blinky.changespeed(Blinky_directions,False,b_turn,b_steps,bl)
     Blinky.update(wall_list,False)
 
-    returned = Inky.changespeed(Inky_directions,i_turn,i_steps,il)
+    returned = Inky.changespeed(Inky_directions,False,i_turn,i_steps,il)
     i_turn = returned[0]
     i_steps = returned[1]
-    Inky.changespeed(Inky_directions,i_turn,i_steps,il)
+    Inky.changespeed(Inky_directions,False,i_turn,i_steps,il)
     Inky.update(wall_list,False)
 
-    returned = Clyde.changespeed(Clyde_directions,c_turn,c_steps,cl)
+    returned = Clyde.changespeed(Clyde_directions,"clyde",c_turn,c_steps,cl)
     c_turn = returned[0]
     c_steps = returned[1]
-    Clyde.changespeed(Clyde_directions,c_turn,c_steps,cl)
+    Clyde.changespeed(Clyde_directions,"clyde",c_turn,c_steps,cl)
     Clyde.update(wall_list,False)
 
     # See if the Pacman block has collided with anything.
