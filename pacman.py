@@ -2,7 +2,7 @@
 # Simpson College Computer Science
 # http://cs.simpson.edu
   
-import pygame
+import pygame._view
   
 black = (0,0,0)
 white = (255,255,255)
@@ -360,7 +360,7 @@ background.fill(black)
 clock = pygame.time.Clock()
 
 pygame.font.init()
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font("freesansbold.ttf", 24)
 
 #default locations for Pacman and monstas
 w = 303-16 #Width
@@ -525,7 +525,7 @@ def startGame():
       text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
       screen.blit(text, [10, 10])
 
-      if score == bll-1:
+      if score == bll:
         doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
 
       monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
