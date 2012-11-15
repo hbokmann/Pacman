@@ -18,7 +18,7 @@ pygame.display.set_icon(Trollicon)
 #Add music
 pygame.mixer.init()
 pygame.mixer.music.load('pacman.mp3')
-# pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.play(-1, 0.0)
 
 # This class represents the bar at the bottom that the player controls
 class Wall(pygame.sprite.Sprite):
@@ -512,14 +512,6 @@ def startGame():
       if len(blocks_hit_list) > 0:
           score +=len(blocks_hit_list)
       
-      if score == bll:
-        doNext("Congratulations, you won!",153,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
-
-      monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
-
-      if monsta_hit_list:
-        doNext("Game Over",243,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
-
       # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
    
       # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
@@ -532,6 +524,15 @@ def startGame():
 
       text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
       screen.blit(text, [10, 10])
+
+      if score == bll-1:
+        doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
+
+      monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
+
+      if monsta_hit_list:
+        doNext("Game Over",235,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
+
       # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
       
       pygame.display.flip()
@@ -539,8 +540,6 @@ def startGame():
       clock.tick(10)
 
 def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate):
-  text2=font.render(message, True, red)
-  screen.blit(text2, [left, 303])
   while True:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -558,4 +557,25 @@ def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,w
             del gate
             startGame()
 
+      #Grey background
+      w = pygame.Surface((400,200))  # the size of your rect
+      w.set_alpha(10)                # alpha level
+      w.fill((128,128,128))           # this fills the entire surface
+      screen.blit(w, (100,200))    # (0,0) are the top-left coordinates
+
+      #Won or lost
+      text1=font.render(message, True, white)
+      screen.blit(text1, [left, 233])
+
+      text2=font.render("To play again, press ENTER.", True, white)
+      screen.blit(text2, [135, 303])
+      text3=font.render("To quit, press ESCAPE.", True, white)
+      screen.blit(text3, [165, 333])
+
+      pygame.display.flip()
+
+      clock.tick(10)
+
 startGame()
+
+pygame.quit()
