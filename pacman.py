@@ -1,4 +1,4 @@
-#Pacman with PyGame
+#Pacman in Python with PyGame
 #https://github.com/hbokmann/Pacman
   
 import pygame._view
