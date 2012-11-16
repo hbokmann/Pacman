@@ -24,6 +24,7 @@ Tested with [PyGame 1.9](http://pygame.org/ftp/pygame-1.9.2a0.win32-py3.2.msi ) 
 * [HTML5 Pacman](http://arandomurl.com/2010/07/25/html5-pacman.html)
 * [PyGame tutorials](http://programarcadegames.com/index.php?lang=en)
 * [How To Write a Pacman Game in JavaScript](http://www.masswerk.at/JavaPac/pacman-howto.html)
+* [Original Pacman game](http://originalpacman.com/)
 
 
 ### Authors and Contributors
