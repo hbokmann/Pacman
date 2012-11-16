@@ -1,6 +1,5 @@
-# Sample Python/Pygame Programs
-# Simpson College Computer Science
-# http://cs.simpson.edu
+#Pacman with PyGame
+#https://github.com/hbokmann/Pacman
   
 import pygame._view
   
