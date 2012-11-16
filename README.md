@@ -7,4 +7,4 @@ http://www.python.org/ftp/python/3.2.3/python-3.2.3.msi
 
 ![Pacman Game Window](https://raw.github.com/hbokmann/Pacman/master/images/pacman.jpg)
 
-GitHub Project Page: https://github.com/hbokmann/Pacman
+GitHub Project Page: http://hbokmann.github.com/Pacman/
