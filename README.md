@@ -27,13 +27,6 @@ Tested with [PyGame 1.9](http://pygame.org/ftp/pygame-1.9.2a0.win32-py3.2.msi ) 
 * [Original Pacman game](http://originalpacman.com/)
 
 
-### Authors and Contributors
-Hans Bokmann (@hbokmann)
-
-Ingrid Pärkson
-
-Peeter Robert Reissar
-
 
 ### Support or Contact
 Blog: http://www.bokmann.com
