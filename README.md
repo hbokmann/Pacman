@@ -4,7 +4,7 @@ This is a very minimal implementation of the Pacman game, having only one level 
 
 Download installer from here: https://github.com/hbokmann/Pacman/blob/master/pacman.exe
 
-![Pacman Game Window](https://github.com/hbokmann/Pacman/blob/master/images/pacman.jpg)
+![Pacman Game Window](https://raw.github.com/hbokmann/Pacman/master/images/pacman.jpg)
 
 
 # Future development
