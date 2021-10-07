@@ -1,18 +1,22 @@
 #Pacman in Python with PyGame
 #https://github.com/hbokmann/Pacman
   
-import pygame._view
-  
-black = (0,0,0)
+import pygame
+#._view
+black = (147,191,133) # alterado para verde
 white = (255,255,255)
 blue = (0,0,255)
 green = (0,255,0)
 red = (255,0,0)
 purple = (255,0,255)
-yellow   = ( 255, 255,   0)
+yellow   = ( 255, 255, 0)
+violet = (128,55,144)
 
-Trollicon=pygame.image.load('images/Trollman.png')
+Trollicon=pygame.image.load('images/pacman.png')
 pygame.display.set_icon(Trollicon)
+
+# block = pygame.image.load('images/hamburger.jpg')
+# pygame.display.set_icon(block)
 
 #Add music
 pygame.mixer.init()
@@ -83,7 +87,7 @@ def setupRoomOne(all_sprites_list):
      
     # Loop through the list. Create the wall, add it to the list
     for item in walls:
-        wall=Wall(item[0],item[1],item[2],item[3],blue)
+        wall=Wall(item[0],item[1],item[2],item[3],violet)
         wall_list.add(wall)
         all_sprites_list.add(wall)
          
@@ -92,7 +96,7 @@ def setupRoomOne(all_sprites_list):
 
 def setupGate(all_sprites_list):
       gate = pygame.sprite.RenderPlain()
-      gate.add(Wall(282,242,42,2,white))
+      gate.add(Wall(282,242,42,2,black))
       all_sprites_list.add(gate)
       return gate
 
@@ -359,7 +363,7 @@ background.fill(black)
 clock = pygame.time.Clock()
 
 pygame.font.init()
-font = pygame.font.Font("freesansbold.ttf", 24)
+font = pygame.font.Font("DejaVuSans-BoldOblique.ttf", 24)
 
 #default locations for Pacman and monstas
 w = 303-16 #Width
@@ -398,11 +402,11 @@ def startGame():
 
 
   # Create the player paddle object
-  Pacman = Player( w, p_h, "images/Trollman.png" )
+  Pacman = Player( w, p_h, "images/pacman.png" )
   all_sprites_list.add(Pacman)
   pacman_collide.add(Pacman)
    
-  Blinky=Ghost( w, b_h, "images/Blinky.png" )
+  Blinky=Ghost( w, b_h, "images/Blinky.png")
   monsta_list.add(Blinky)
   all_sprites_list.add(Blinky)
 
@@ -447,7 +451,15 @@ def startGame():
 
   done = False
 
+  pause = True
+
   i = 0
+
+  while pause == False:
+      for event in pygame.event.get():
+          if event.type == [pygame.K_p]:
+              pause = True
+
 
   while done == False:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
@@ -504,12 +516,13 @@ def startGame():
       Clyde.changespeed(Clyde_directions,"clyde",c_turn,c_steps,cl)
       Clyde.update(wall_list,False)
 
+
       # See if the Pacman block has collided with anything.
       blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True)
        
       # Check the list of collisions.
       if len(blocks_hit_list) > 0:
-          score +=len(blocks_hit_list)
+          score +=len(blocks_hit_list)*2
       
       # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
    
@@ -521,8 +534,8 @@ def startGame():
       all_sprites_list.draw(screen)
       monsta_list.draw(screen)
 
-      text=font.render("Score: "+str(score)+"/"+str(bll), True, red)
-      screen.blit(text, [10, 10])
+      text=font.render("Pontos: "+str(score), True, blue)
+      screen.blit(text, [385, 3])
 
       if score == bll:
         doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
@@ -530,7 +543,7 @@ def startGame():
       monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
 
       if monsta_hit_list:
-        doNext("Game Over",235,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
+        doNext("GAME OVER!",235,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
 
       # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
       
@@ -566,10 +579,10 @@ def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,w
       text1=font.render(message, True, white)
       screen.blit(text1, [left, 233])
 
-      text2=font.render("To play again, press ENTER.", True, white)
-      screen.blit(text2, [135, 303])
-      text3=font.render("To quit, press ESCAPE.", True, white)
-      screen.blit(text3, [165, 333])
+      text2=font.render("Para jogar novamente, pressione ENTER.", True, white)
+      screen.blit(text2, [50, 303])
+      text3=font.render("Para sair, pressione ESC.", True, white)
+      screen.blit(text3, [50, 333])
 
       pygame.display.flip()
 
