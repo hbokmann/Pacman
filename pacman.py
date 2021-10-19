@@ -1,7 +1,8 @@
 #Pacman in Python with PyGame
 #https://github.com/hbokmann/Pacman
   
-import pygame._view
+import pygame
+import sys
   
 black = (0,0,0)
 white = (255,255,255)
@@ -547,6 +548,7 @@ def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,w
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_ESCAPE:
             pygame.quit()
+            sys.exit()
           if event.key == pygame.K_RETURN:
             del all_sprites_list
             del block_list
