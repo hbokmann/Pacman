@@ -1,7 +1,8 @@
 #Pacman in Python with PyGame
 #https://github.com/hbokmann/Pacman
   
-import pygame._view
+import pygame
+import sys
   
 black = (0,0,0)
 white = (255,255,255)
@@ -11,7 +12,7 @@ red = (255,0,0)
 purple = (255,0,255)
 yellow   = ( 255, 255,   0)
 
-Trollicon=pygame.image.load('images/Trollman.png')
+Trollicon=pygame.image.load('images/vaxman.png')
 pygame.display.set_icon(Trollicon)
 
 #Add music
@@ -398,7 +399,7 @@ def startGame():
 
 
   # Create the player paddle object
-  Pacman = Player( w, p_h, "images/Trollman.png" )
+  Pacman = Player( w, p_h, "images/vaxman.png" )
   all_sprites_list.add(Pacman)
   pacman_collide.add(Pacman)
    
@@ -547,6 +548,7 @@ def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,w
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_ESCAPE:
             pygame.quit()
+            sys.exit()
           if event.key == pygame.K_RETURN:
             del all_sprites_list
             del block_list
